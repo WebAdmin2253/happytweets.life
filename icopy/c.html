@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iCopy - Save Your iPod Music</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #ececec;
+    color: #333;
+}
+
+/* Navigation Bar */
+#topbar {
+    height: 36px;
+    background: linear-gradient(#7d7d7d, #5c5c5c, #444);
+    border-bottom: 1px solid #222;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .35);
+}
+
+#nav {
+    width: 980px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 36px;
+}
+
+/* Explicitly White Logo */
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#nav .nav-links {
+    display: flex;
+}
+
+#nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 0 18px;
+    line-height: 36px;
+    border-left: 1px solid rgba(255, 255, 255, .08);
+    border-right: 1px solid rgba(0, 0, 0, .25);
+    cursor: pointer;
+}
+
+#nav a:first-child {
+    border-left: none;
+}
+
+#nav a:hover, #nav a.active {
+    background: rgba(255, 255, 255, .12);
+}
+
+/* Content Container & Dynamic Views */
+.container {
+    width: 980px;
+    margin: 25px auto;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Hero Section */
+#hero {
+    background: white;
+    border: 1px solid #bcbcbc;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    margin-bottom: 25px;
+}
+
+.heroContent {
+    padding: 45px;
+    text-align: center;
+}
+
+.heroContent h1 {
+    font-size: 52px;
+    font-weight: 300;
+    color: #222;
+}
+
+.heroContent h2 {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: normal;
+    color: #666;
+}
+
+/* Buttons */
+.download-action {
+    margin-top: 30px;
+}
+
+.button {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 11px 24px;
+    border-radius: 6px;
+    border: 1px solid #005ba9;
+    background: linear-gradient(#52a8ff, #0077cc);
+    box-shadow: 
+        inset 0 1px rgba(255,255,255,.5),
+        0 1px 2px rgba(0,0,0,.25);
+    cursor: pointer;
+}
+
+.button:hover {
+    background: linear-gradient(#69b6ff, #1486dd);
+}
+
+.button.secondary {
+    border: 1px solid #bcbcbc;
+    background: linear-gradient(#ffffff, #e1e1e1);
+    color: #333;
+}
+
+.button.secondary:hover {
+    background: linear-gradient(#ffffff, #ececec);
+}
+
+/* Features Grid */
+#features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    background: white;
+    border: 1px solid #cfcfcf;
+    padding: 25px;
+}
+
+.feature h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #444;
+}
+
+.feature p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* Page Card Layouts for Sub-views */
+.card-page {
+    background: white;
+    border: 1px solid #cfcfcf;
+    padding: 40px;
+    min-height: 300px;
+}
+
+.card-page h2 {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+.card-page p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Newsroom Layout */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.news-card {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fafafa;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.news-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.news-card-body {
+    padding: 20px;
+}
+
+.news-card-date {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.news-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.news-card-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Article Reader View */
+.article-nav-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.article-header-img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+}
+
+.article-content {
+    line-height: 1.7;
+    color: #333;
+    font-size: 16px;
+}
+
+.article-content h1, .article-content h2, .article-content h3 {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #111;
+}
+
+.article-content p {
+    margin-bottom: 16px;
+}
+
+.article-content ul, .article-content ol {
+    margin-left: 24px;
+    margin-bottom: 16px;
+}
+
+.article-content blockquote {
+    border-left: 4px solid #0077cc;
+    padding-left: 15px;
+    color: #555;
+    font-style: italic;
+    margin: 20px 0;
+}
+
+/* Footer */
+footer {
+    width: 980px;
+    margin: 40px auto;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
+
+footer a {
+    color: #08c;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media(max-width: 1000px) {
+    #nav,
+    .container,
+    footer {
+        width: 95%;
+    }
+
+    #features,
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .heroContent h1 {
+        font-size: 42px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="topbar">
+    <div id="nav">
+        <div class="logo" onclick="switchView('home')">iCopy</div>
+        <div class="nav-links">
+            <a onclick="switchView('home')" id="nav-home" class="active">Home</a>
+            <a onclick="switchView('newsroom')" id="nav-newsroom">Newsroom</a>
+            <a onclick="switchView('download')" id="nav-download">Download</a>
+            <a onclick="switchView('support')" id="nav-support">Support</a>
+            <a href="assets/source.zip" target="_blank" rel="noopener">Source Code</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div id="view-home" class="view active">
+        <div id="hero">
+            <div class="heroContent">
+                <h1>iCopy</h1>
+                <h2>Rescuing iPod music, one device at a time.</h2>
+                <div class="download-action">
+                    <a class="button" onclick="switchView('download')">
+                        Download iCopy
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="features">
+            <div class="feature">
+                <h3>Recover Music</h3>
+                <p>
+                    Effortlessly transfer songs from your legacy iPod straight to your Mac with a single click.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Preserve Everything</h3>
+                <p>
+                    Keep your music library complete. Albums, artists, playlists, and metadata stay organized during transfer.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Built for macOS</h3>
+                <p>
+                    Designed exclusively for macOS with a lightweight, distraction-free interface inspired by classic Apple software.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Free Forever</h3>
+                <p>
+                    No paywalls, ads, or transfer caps. Unlike other tools, iCopy delivers a reliable experience completely free of charge.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Open Source</h3>
+                <p>
+                    iCopy is entirely open-source, with <a href="assets/source.zip">100% of the codebase publicly available</a> for review.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Extract Media & Notes</h3>
+                <p>
+                    Transfer voice memos and photo libraries from your iPod, with built-in voice memo transcription upon import.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-newsroom" class="view">
+        <div class="card-page">
+            <h2>Newsroom</h2>
+            <p>The latest scoop of updates and what's going on with the iCopy Project.</p>
+            <div id="news-grid" class="news-grid">
+            </div>
+        </div>
+    </div>
+
+    <div id="view-article" class="view">
+        <div class="card-page">
+            <div class="article-nav-actions">
+                <button class="button secondary" onclick="switchView('newsroom')" style="padding: 6px 14px; font-size: 13px;">← Back to Newsroom</button>
+                <button id="share-btn" class="button secondary" onclick="shareArticle()" style="padding: 6px 14px; font-size: 13px;">Share Article</button>
+            </div>
+            <h2 id="article-title"></h2>
+            <p id="article-meta" style="font-size: 13px; color: #888; margin-top: -10px; margin-bottom: 20px;"></p>
+            <img id="article-image" class="article-header-img" src="" alt="" style="display: none;">
+            <div id="article-body" class="article-content">
+            </div>
+        </div>
+    </div>
+
+    <div id="view-download" class="view">
+        <div class="card-page">
+            <h2>Download iCopy*</h2>
+            <p>Get the latest version of iCopy for macOS. Compatible with macOS 11.0 Big Sur or later.</p>
+            <div class="download-action" style="margin-bottom: 25px;">
+                <a class="button" href="assets/icopy.zip">Download...</a>
+            </div>
+            <p><strong>System Requirements:</strong> macOS 11.0+, USB Connection, Apple iPod (<a href="https://www.reddit.com/r/iCopy/s/41m7N7UeZx">see compatibility</a>)</p>
+            <i>Additional Note: If you are having trouble, see the <a href="https://www.reddit.com/r/iCopy/s/pGcFz5igMq">getting started</a> guide.</i>
+        </div>
+    </div>
+
+    <div id="view-support" class="view">
+        <div class="card-page">
+            <h2>Support & Assistance</h2>
+            <p>Feel free to make a post in <a href="https://reddit.com/r/iCopy">r/iCopy</a> on Reddit, or simply <a href="mailto:b1naryn1nja@outlook.com">email me</a>. I'll be happy to help you from there!</p>
+        </div>
+    </div>
+
+    <div id="view-privacy" class="view">
+        <div class="card-page">
+            <h2>Privacy Policy</h2>
+            <p>iCopy values your privacy. All processing and file extractions occur locally on your Mac. We do not collect, store, or transmit your personal data, media files, or telemetry.</p>
+        </div>
+    </div>
+
+    <div id="view-terms" class="view">
+        <div class="card-page">
+            <h2>Terms of Use</h2>
+            <p>iCopy is provided "as-is" under the open-source MIT License without warranty of any kind. Users are responsible for ensuring they have the right to transfer media owned on their devices.</p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Copyright © Schneideduf '26. All rights reserved.
+    <br><br>
+    <a onclick="switchView('privacy')">Privacy Policy</a> |
+    <a onclick="switchView('terms')">Terms of Use</a> |
+    <a onclick="switchView('newsroom')">Newsroom</a> |
+    <a onclick="switchView('support')">Contact</a>
+</footer>
+
+<script>
+// JSON Dataset for Newsroom Articles
+const articlesData = [
+    {
+        "id": "launch",
+        "title": "The iCopy website has launched!",
+        "author": "Joshua Schneideduf, B1naryN1nja",
+        "date": "July 28, 2026",
+        "image": "articles/img/launch.png",
+        "description": "After one long year of waiting, and personally a lot of schoolwork for me, I have finally finished the iCopy website. Click to read more...",
+        "markdownFile": "articles/launch.md"
+    }
+];
+
+let currentArticleId = null;
+
+// Switch main views
+function switchView(viewName) {
+    const views = document.querySelectorAll('.view');
+    views.forEach(view => view.classList.remove('active'));
+
+    const navLinks = document.querySelectorAll('#nav a');
+    navLinks.forEach(link => link.classList.remove('active'));
+
+    const targetView = document.getElementById('view-' + viewName);
+    if (targetView) {
+        targetView.classList.add('active');
+    }
+
+    const targetNav = document.getElementById('nav-' + viewName);
+    if (targetNav) {
+        targetNav.classList.add('active');
+    }
+
+    // Clean URL query when moving away from individual article view
+    if (viewName !== 'article' && window.location.search.includes('article=')) {
+        window.history.pushState({}, '', window.location.pathname);
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Render Newsroom grid items from JSON
+function renderNewsroom() {
+    const grid = document.getElementById('news-grid');
+    grid.innerHTML = '';
+
+    articlesData.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.onclick = () => loadArticle(article.id);
+
+        card.innerHTML = `
+            ${article.image ? `<img src="${article.image}" alt="${article.title}">` : ''}
+            <div class="news-card-body">
+                <div class="news-card-date">${article.date} ${article.author ? '• by ' + article.author : ''}</div>
+                <div class="news-card-title">${article.title}</div>
+                <div class="news-card-desc">${article.description}</div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Load and read markdown article inside the view
+async function loadArticle(articleId, updateUrl = true) {
+    const article = articlesData.find(a => a.id === articleId);
+    if (!article) return;
+
+    currentArticleId = article.id;
+    document.getElementById('article-title').innerText = article.title;
+    
+    // Set author and date metadata
+    const metaStr = article.author 
+        ? `${article.date} — by ${article.author}` 
+        : article.date;
+    document.getElementById('article-meta').innerText = metaStr;
+
+    // Update Browser URL parameter if requested
+    if (updateUrl) {
+        const newUrl = `${window.location.pathname}?article=${article.id}`;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    const imgEl = document.getElementById('article-image');
+    if (article.image) {
+        imgEl.src = article.image;
+        imgEl.style.display = 'block';
+    } else {
+        imgEl.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('article-body');
+    bodyEl.innerHTML = 'Loading article content...';
+
+    switchView('article');
+
+    try {
+        const response = await fetch(article.markdownFile);
+        if (!response.ok) throw new Error("Failed to load file");
+        const markdownText = await response.text();
+        bodyEl.innerHTML = parseMarkdown(markdownText);
+    } catch (err) {
+        // Fallback display if fetching external file fails in offline testing
+        bodyEl.innerHTML = parseMarkdown(`### Article Preview\n\nUnable to fetch \`${article.markdownFile}\` directly. Ensure the file path is accessible on your local or remote server.\n\n> Summary: ${article.description}`);
+    }
+}
+
+// Share button functionality
+async function shareArticle() {
+    if (!currentArticleId) return;
+    
+    const article = articlesData.find(a => a.id === currentArticleId);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?article=${currentArticleId}`;
+    const btn = document.getElementById('share-btn');
+
+    // Use native share sheet if available
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: article ? article.title : 'iCopy Article',
+                url: shareUrl
+            });
+            return;
+        } catch (e) {
+            // Fallback to clipboard if user cancels or browser fails
+        }
+    }
+
+    // Fallback: Copy link to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = '✓ Link Copied!';
+        setTimeout(() => {
+            btn.innerText = originalText;
+        }, 2000);
+    }).catch(err => {
+        alert(`Copy article link: ${shareUrl}`);
+    });
+}
+
+// Lightweight Inline Markdown Parser
+function parseMarkdown(md) {
+    return md
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+        .replace(/\*(.*)\*/gim, '<em>$1</em>')
+        .replace(/`([^`]+)`/gim, '<code>$1</code>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>')
+        .replace(/\n\s*\n/g, '</p><p>')
+        .replace(/^(.+)$/gm, function(match) {
+            if (match.startsWith('<h') || match.startsWith('<block') || match.startsWith('<p')) {
+                return match;
+            }
+            return '<p>' + match + '</p>';
+        });
+}
+
+// Initialize on load & handle deep-linked articles via URL query params
+document.addEventListener('DOMContentLoaded', () => {
+    renderNewsroom();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleParam = urlParams.get('article');
+    
+    if (articleParam) {
+        loadArticle(articleParam, false);
+    }
+});
+</script>
+
+</body>
+</html>
