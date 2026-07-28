@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iCopy Newsroom</title>
+    <link>https://happytweets.life/iCopy.html</link>
+    <description>Rescuing iPod music, one device at a time. The latest updates, release announcements, and news from the iCopy project.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 Jul 2026 12:00:00 +0000</lastBuildDate>
+    <atom:link href="https://icopy.app/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The official iCopy website is launched, one year later.</title>
+      <link>https://icopy.app/?article=launch</link>
+      <guid isPermaLink="true">https://icopy.app/?article=launch</guid>
+      <pubDate>Tue, 28 Jul 2026 08:00:00 +0000</pubDate>
+      <author>b1naryn1nja@outlook.com (Joshua Schneideduf)</author>
+      <description>After one long year of waiting, and personally a lot of schoolwork for me, I have finally finished the iCopy website.</description>
+      <enclosure url="http://happycoding.life/icopy/articles/img/launch.png" type="image/png" length="0" />
+    </item>
+  </channel>
+</rss>
