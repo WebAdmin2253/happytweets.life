@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iCopy - Save Your iPod Music</title>
+<title>iCopy</title>
 
 <style>
 * {
@@ -288,6 +288,63 @@ body {
     margin: 20px 0;
 }
 
+/* Testimonials Layout */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.testimonial-card {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background: #fafafa;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.testimonial-quote {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    font-style: italic;
+    position: relative;
+}
+
+.testimonial-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eaeaea;
+    padding-top: 12px;
+    font-size: 13px;
+}
+
+.testimonial-user {
+    font-weight: bold;
+    color: #444;
+}
+
+.testimonial-sub {
+    color: #888;
+    font-size: 12px;
+}
+
+.testimonial-link {
+    color: #ff4500;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.testimonial-link:hover {
+    text-decoration: underline;
+}
+
 /* Footer */
 footer {
     width: 980px;
@@ -316,7 +373,8 @@ footer a:hover {
     }
 
     #features,
-    .news-grid {
+    .news-grid,
+    .testimonials-grid {
         grid-template-columns: 1fr;
     }
 
@@ -335,6 +393,7 @@ footer a:hover {
         <div class="nav-links">
             <a onclick="switchView('home')" id="nav-home" class="active">Home</a>
             <a onclick="switchView('newsroom')" id="nav-newsroom">Newsroom</a>
+            <a onclick="switchView('testimonials')" id="nav-testimonials">Testimonials</a>
             <a onclick="switchView('download')" id="nav-download">Download</a>
             <a onclick="switchView('support')" id="nav-support">Support</a>
             <a href="assets/source.zip" target="_blank" rel="noopener">Source Code</a>
@@ -411,6 +470,15 @@ footer a:hover {
         </div>
     </div>
 
+    <div id="view-testimonials" class="view">
+        <div class="card-page">
+            <h2>What People Are Saying</h2>
+            <p>Feedback and comments from Reddit testing and using iCopy.</p>
+            <div id="testimonials-grid" class="testimonials-grid">
+            </div>
+        </div>
+    </div>
+
     <div id="view-article" class="view">
         <div class="card-page">
             <div class="article-nav-actions">
@@ -466,6 +534,7 @@ footer a:hover {
     <a onclick="switchView('privacy')">Privacy Policy</a> |
     <a onclick="switchView('terms')">Terms of Use</a> |
     <a onclick="switchView('newsroom')">Newsroom</a> |
+    <a onclick="switchView('testimonials')">Testimonials</a> |
     <a onclick="switchView('support')">Contact</a>
 </footer>
 
@@ -480,6 +549,73 @@ const articlesData = [
         "image": "articles/img/launch.png",
         "description": "After one long year of waiting, and personally a lot of schoolwork for me, I have finally finished the iCopy website. Click to read more...",
         "markdownFile": "articles/launch.md"
+    }
+];
+
+// JSON Dataset for Embedded Reddit Testimonials
+const testimonialsData = [
+    {
+        "id": "1",
+        "username": "u/iPoduck",
+        "subreddit": "r/ipod",
+        "quote": "I always go for Open Source apps like yours. Kudos to you!",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7ima3p/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+    {
+        "id": "2",
+        "username": "u/peemints",
+        "subreddit": "r/ipod",
+        "quote": "i have a classic 4 mono i thrifted with 100s of era appropriate songs on it i’ve been wanting to get out so this is awesome! thank you so much, i can’t wait to try it",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7bcp7t/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+    {
+        "id": "3",
+        "username": "u/sprouttherainbow",
+        "subreddit": "r/ipod",
+        "quote": "I've been looking for an app like this for years and someone just pointed me to this thread. Thank you so much, kind internet stranger!!!",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/nsapdpp/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+	{
+        "id": "4",
+        "username": "u/AdventJer",
+        "subreddit": "r/ipod",
+        "quote": "I’ve been struggling with my old iPod and saving my music all day. God send!",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7bpo1i/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+	{
+        "id": "5",
+        "username": "u/Draw-Quirky",
+        "subreddit": "r/ipod",
+        "quote": "Thank you for the hard work, this is awesome!!",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7ccqq5/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+    {
+        "id": "6",
+        "username": "u/fanaticus13",
+        "subreddit": "r/ipod",
+        "quote": "I was just looking for one! Looks good, thanks!☺️\n\nEdit: you made it completely free. Can one buy you a cup of coffee?",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7ccx7o/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+	{
+        "id": "7",
+        "username": "u/now_the_rad",
+        "subreddit": "r/ipod",
+        "quote": "Literally a god send. How do I tip you?",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n7gpewz/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+	{
+        "id": "8",
+        "username": "u/iraveallday",
+        "subreddit": "r/ipod",
+        "quote": "Ah man wish I had known of your tool before replacing the guts of my 6th gen! Awesome work creating this app and it seems to work well on my MacBook!",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/n8y1qf6/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+    },
+	{
+        "id": "9",
+        "username": "u/MURDRZILLA",
+        "subreddit": "r/ipod",
+        "quote": "I was not expecting a reply at all and better yet an update already! Thanks so much, you're doing gods work! 🙏🙌",
+        "redditUrl": "https://www.reddit.com/r/ipod/comments/1mji6ia/comment/nuf2sku/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
     }
 ];
 
@@ -527,6 +663,31 @@ function renderNewsroom() {
                 <div class="news-card-date">${article.date} ${article.author ? '• by ' + article.author : ''}</div>
                 <div class="news-card-title">${article.title}</div>
                 <div class="news-card-desc">${article.description}</div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Render Testimonials from embedded JSON
+function renderTestimonials() {
+    const grid = document.getElementById('testimonials-grid');
+    grid.innerHTML = '';
+
+    testimonialsData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'testimonial-card';
+
+        card.innerHTML = `
+            <div class="testimonial-quote">“${item.quote}”</div>
+            <div class="testimonial-meta">
+                <div>
+                    <span class="testimonial-user">${item.username}</span>
+                    <span class="testimonial-sub"> in ${item.subreddit}</span>
+                </div>
+                <a class="testimonial-link" href="${item.redditUrl}" target="_blank" rel="noopener">
+                    Original Comment
+                </a>
             </div>
         `;
         grid.appendChild(card);
@@ -633,6 +794,7 @@ function parseMarkdown(md) {
 // Initialize on load & handle deep-linked articles via URL query params
 document.addEventListener('DOMContentLoaded', () => {
     renderNewsroom();
+    renderTestimonials();
 
     const urlParams = new URLSearchParams(window.location.search);
     const articleParam = urlParams.get('article');
